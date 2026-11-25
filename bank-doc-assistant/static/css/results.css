@@ -1,0 +1,94 @@
+/* ==========================================================================
+   Verity - Results Page Stylesheet (results.css)
+   ========================================================================== */
+
+.results-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 36px 24px 60px;
+}
+
+.results-header {
+  margin-bottom: 28px;
+}
+
+.results-header h1 {
+  font-size: 28px;
+  color: var(--text-primary);
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.section {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  margin-top: 24px;
+  box-shadow: var(--shadow-card);
+}
+
+.section h2 {
+  font-size: 18px;
+  color: var(--text-primary);
+  font-weight: 700;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.section p {
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.section form button {
+  padding: 10px 20px;
+  background: var(--primary-gradient);
+  border: none;
+  border-radius: var(--radius-sm);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px var(--primary-glow);
+  transition: var(--transition);
+}
+
+.section form button:hover {
+  opacity: 0.95;
+  transform: translateY(-1px);
+}
+
+.doc {
+  background: var(--success-bg);
+  border: 1px solid var(--success-border);
+  color: var(--success-text);
+}
+
+.undoc {
+  background: var(--warning-bg);
+  border: 1px solid var(--warning-border);
+  color: var(--warning-text);
+}
+
+.violations-list {
+  list-style: none;
+  padding: 0;
+}
+
+.violations-list li {
+  padding: 10px 14px;
+  background: var(--danger-bg);
+  border: 1px solid var(--danger-border);
+  border-radius: var(--radius-sm);
+  color: var(--danger-text);
+  margin-bottom: 8px;
+  font-size: 13px;
+}
+
+.pass-message {
+  color: var(--success-text);
+  font-weight: 600;
+}

@@ -1,122 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Verity – Bank Marketing Data Documentation Assistant</title>
-<style>
-/* ===== RESET & BASE ===== */
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#0a0e1a;color:#c8d6e5;min-height:100vh}
-
-/* ===== NAV ===== */
-nav{display:flex;align-items:center;justify-content:space-between;padding:14px 32px;background:#0f1322;border-bottom:1px solid #1a2035}
-.nav-brand{display:flex;align-items:center;gap:10px}
-.nav-brand .icon{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#2563eb,#1d4ed8);display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;font-weight:700}
-.nav-brand h1{font-size:16px;color:#fff;font-weight:600}
-.nav-brand p{font-size:11px;color:#64748b}
-.nav-links{display:flex;gap:6px}
-.nav-links a{padding:8px 18px;border-radius:6px;text-decoration:none;color:#94a3b8;font-size:13px;font-weight:500;transition:all .2s}
-.nav-links a.active{background:#1e293b;color:#3b82f6}
-.nav-links a:hover{color:#fff}
-.nav-right{display:flex;align-items:center;gap:12px}
-.theme-btn{background:none;border:1px solid #1e293b;border-radius:8px;width:36px;height:36px;cursor:pointer;color:#94a3b8;font-size:16px;display:flex;align-items:center;justify-content:center}
-
-/* ===== LAYOUT ===== */
-.container{max-width:1100px;margin:0 auto;padding:32px 24px}
-.page-header h2{font-size:26px;color:#fff;font-weight:700;margin-bottom:6px}
-.page-header p{font-size:14px;color:#64748b;margin-bottom:28px}
-.grid{display:grid;grid-template-columns:1.5fr 1fr;gap:24px}
-
-/* ===== CARDS ===== */
-.card{background:#111827;border:1px solid #1e293b;border-radius:12px;padding:24px}
-.card h3{font-size:16px;color:#fff;font-weight:600;display:flex;align-items:center;gap:8px;margin-bottom:4px}
-.card h3 .req{font-size:11px;background:#1d4ed8;color:#fff;padding:2px 8px;border-radius:10px;font-weight:500}
-.card h3 .opt{font-size:11px;background:#374151;color:#94a3b8;padding:2px 8px;border-radius:10px;font-weight:500}
-.card p.sub{font-size:13px;color:#64748b;margin-bottom:16px}
-
-/* ===== DROP ZONE ===== */
-.dropzone{border:2px dashed #1e293b;border-radius:10px;padding:36px 20px;text-align:center;transition:all .25s;cursor:pointer;margin-bottom:8px}
-.dropzone:hover,.dropzone.dragover{border-color:#3b82f6;background:rgba(59,130,246,.06)}
-.dropzone .cloud{font-size:38px;color:#3b82f6;margin-bottom:8px}
-.dropzone .label{font-size:14px;color:#94a3b8;margin-bottom:12px}
-.dropzone .or{font-size:12px;color:#475569;margin-bottom:10px}
-.browse-btn{padding:8px 20px;background:#1e293b;border:1px solid #334155;border-radius:8px;color:#e2e8f0;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:background .2s}
-.browse-btn:hover{background:#2d3748}
-.dropzone .meta{font-size:11px;color:#475569;margin-top:10px}
-.file-info{display:none;padding:10px 14px;background:#1a2744;border:1px solid #1e3a5f;border-radius:8px;margin-top:10px;font-size:13px;color:#60a5fa;align-items:center;gap:8px}
-.file-info.show{display:flex}
-.file-info .remove{margin-left:auto;cursor:pointer;color:#ef4444;font-size:16px}
-
-/* ===== PASTE BOX ===== */
-.paste-section{margin-top:14px}
-.paste-section label{font-size:13px;color:#94a3b8;margin-bottom:6px;display:block}
-.paste-section textarea{width:100%;height:100px;background:#0f1322;border:1px solid #1e293b;border-radius:8px;color:#c8d6e5;padding:10px;font-size:13px;font-family:inherit;resize:vertical}
-.paste-section textarea:focus{outline:none;border-color:#3b82f6}
-
-/* ===== TARGET INPUT ===== */
-.target-section{margin-top:16px}
-.target-section label{font-size:13px;color:#94a3b8;margin-bottom:6px;display:block}
-.target-section input{width:100%;padding:10px 12px;background:#0f1322;border:1px solid #1e293b;border-radius:8px;color:#c8d6e5;font-size:13px}
-.target-section input:focus{outline:none;border-color:#3b82f6}
-
-/* ===== SIDEBAR ===== */
-.sidebar{display:flex;flex-direction:column;gap:20px}
-.guide-card{background:#111827;border:1px solid #1e293b;border-radius:12px;padding:20px}
-.guide-card h3{font-size:15px;color:#fff;margin-bottom:14px;display:flex;align-items:center;gap:8px}
-.guide-card h3 .g-icon{color:#3b82f6;font-size:18px}
-.guide-item{display:flex;align-items:flex-start;gap:8px;margin-bottom:10px;font-size:13px;color:#94a3b8;line-height:1.5}
-.guide-item .check{color:#22c55e;font-size:15px;flex-shrink:0;margin-top:1px}
-.step-item{display:flex;align-items:flex-start;gap:10px;margin-bottom:12px;font-size:13px;color:#94a3b8;line-height:1.5}
-.step-num{width:24px;height:24px;border-radius:50%;background:#1d4ed8;color:#fff;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-
-/* ===== BUTTONS ===== */
-.actions{display:flex;gap:12px;margin-top:16px}
-.btn-primary{flex:1;padding:14px;background:linear-gradient(135deg,#2563eb,#1d4ed8);border:none;border-radius:10px;color:#fff;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity .2s}
-.btn-primary:hover{opacity:.9}
-.btn-primary:disabled{opacity:.5;cursor:not-allowed}
-.btn-secondary{padding:14px 24px;background:#1e293b;border:1px solid #334155;border-radius:10px;color:#94a3b8;font-size:14px;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:6px;transition:background .2s}
-.btn-secondary:hover{background:#2d3748}
-
-/* ===== SPINNER ===== */
-.spinner{display:none;width:18px;height:18px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-
-/* ===== STATUS BAR ===== */
-.status-bar{display:none;margin-top:16px;padding:12px 16px;border-radius:8px;font-size:13px;font-weight:500}
-.status-bar.info{display:block;background:#172554;border:1px solid #1e3a5f;color:#60a5fa}
-.status-bar.error{display:block;background:#450a0a;border:1px solid #7f1d1d;color:#fca5a5}
-.status-bar.success{display:block;background:#052e16;border:1px solid #166534;color:#86efac}
-
-/* ===== MODAL ===== */
-.modal-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:100;align-items:center;justify-content:center;padding:16px}
-.modal-backdrop.open{display:flex}
-.modal{background:#111827;border:1px solid #1e293b;border-radius:14px;width:100%;max-width:480px;padding:24px;color:#c8d6e5}
-.modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
-.modal-head h3{font-size:18px;color:#fff}
-.modal-close{background:none;border:none;color:#94a3b8;font-size:20px;cursor:pointer}
-.setting-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid #1e293b;font-size:13px}
-.setting-row:last-child{border-bottom:none}
-.setting-btn{padding:6px 14px;background:#1e293b;border:1px solid #334155;border-radius:6px;color:#e2e8f0;font-size:12px;cursor:pointer}
-.setting-btn:hover{background:#2d3748}
-.setting-msg{margin-top:10px;font-size:12px;color:#60a5fa;min-height:16px}
-
-/* ===== LIGHT THEME ===== */
-body.light{background:#f1f5f9;color:#1e293b}
-body.light nav{background:#ffffff;border-bottom-color:#e2e8f0}
-body.light .nav-brand h1,body.light .page-header h2,body.light .card h3,body.light .guide-card h3,body.light .modal-head h3{color:#0f172a}
-body.light .nav-links a,body.light .nav-links button.nav-btn{color:#475569}
-body.light .nav-links a.active{background:#eff6ff;color:#2563eb}
-body.light .theme-btn{border-color:#cbd5e1;color:#475569}
-body.light .card,body.light .guide-card,body.light .modal{background:#ffffff;border-color:#e2e8f0;color:#1e293b}
-body.light .dropzone{border-color:#cbd5e1}
-body.light .browse-btn,body.light .btn-secondary,body.light .setting-btn{background:#f8fafc;border-color:#cbd5e1;color:#1e293b}
-body.light .target-section input{background:#f8fafc;border-color:#cbd5e1;color:#0f172a}
-body.light .setting-row{border-bottom-color:#e2e8f0}
-
-/* ===== RESPONSIVE ===== */
-@media(max-width:768px){.grid{grid-template-columns:1fr}}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verity – Bank Marketing Data Documentation Assistant</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="stylesheet" href="/static/css/upload.css">
 </head>
 <body>
 
@@ -132,7 +21,7 @@ body.light .setting-row{border-bottom-color:#e2e8f0}
   <div class="nav-links">
     <a href="/" class="active">Upload</a>
     <a href="/dashboard">Dashboard</a>
-    <button type="button" class="nav-btn" style="padding:8px 18px;border-radius:6px;background:none;border:none;color:#94a3b8;font-size:13px;font-weight:500;cursor:pointer;font-family:inherit" onclick="openSettings()">Settings</button>
+    <button type="button" class="nav-btn" onclick="openSettings()">Settings</button>
   </div>
   <div class="nav-right">
     <button type="button" class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="Toggle theme">☀</button>
@@ -153,7 +42,7 @@ body.light .setting-row{border-bottom-color:#e2e8f0}
         <!-- CSV Upload Card -->
         <div class="card" style="margin-bottom:20px">
           <h3>
-            <span style="color:#3b82f6;font-size:20px">📄</span>
+            <span style="color:var(--primary-500);font-size:20px">📄</span>
             Bank Marketing Dataset (CSV)
             <span class="req">Required</span>
           </h3>
@@ -172,7 +61,7 @@ body.light .setting-row{border-bottom-color:#e2e8f0}
           </div>
 
           <div class="target-section">
-            <label>Target column for class-imbalance check (optional):</label>
+            <label for="targetCol">Target column for class-imbalance check (optional):</label>
             <input type="text" id="targetCol" name="target_column" placeholder="e.g. conversion_status">
           </div>
         </div>
@@ -211,115 +100,6 @@ body.light .setting-row{border-bottom-color:#e2e8f0}
   </form>
 </div>
 
-<script>
-// ===== Drag & drop + file selection =====
-function setupDrop(dropId, inputId, infoId, nameId) {
-  const drop = document.getElementById(dropId);
-  const input = document.getElementById(inputId);
-  const info = document.getElementById(infoId);
-  const nameEl = document.getElementById(nameId);
-
-  ['dragenter','dragover'].forEach(e => drop.addEventListener(e, ev => {ev.preventDefault();drop.classList.add('dragover')}));
-  ['dragleave','drop'].forEach(e => drop.addEventListener(e, ev => {ev.preventDefault();drop.classList.remove('dragover')}));
-  drop.addEventListener('drop', ev => {
-    if(ev.dataTransfer.files.length){input.files = ev.dataTransfer.files; showFile(input,info,nameEl)}
-  });
-  input.addEventListener('change', () => showFile(input,info,nameEl));
-}
-function showFile(input,info,nameEl){
-  if(input.files.length){nameEl.textContent='📄 '+input.files[0].name+' ('+formatSize(input.files[0].size)+')';info.classList.add('show')}
-}
-function formatSize(b){if(b<1024)return b+' B';if(b<1048576)return (b/1024).toFixed(1)+' KB';return (b/1048576).toFixed(1)+' MB'}
-function clearFile(type){
-  const input=document.getElementById(type+'Input');
-  const info=document.getElementById(type+'Info');
-  input.value='';info.classList.remove('show');
-}
-function clearAll(){clearFile('csv');document.getElementById('targetCol').value='';hideStatus()}
-
-setupDrop('csvDrop','csvInput','csvInfo','csvName');
-
-// ===== Status bar =====
-function showStatus(msg,type){const s=document.getElementById('statusBar');s.className='status-bar '+type;s.textContent=msg}
-function hideStatus(){document.getElementById('statusBar').className='status-bar'}
-
-// ===== Form submit =====
-document.getElementById('mainForm').addEventListener('submit', async function(e) {
-  e.preventDefault();
-  const btn = document.getElementById('submitBtn');
-  const spinner = document.getElementById('spinner');
-
-  // Validation
-  const csvInput = document.getElementById('csvInput');
-
-  if (!csvInput.files.length) { showStatus('Please upload a CSV dataset.','error'); return }
-
-  btn.disabled = true;
-  spinner.style.display = 'inline-block';
-  showStatus('Processing dataset… This may take a moment.','info');
-
-  const fd = new FormData(this);
-
-  try {
-    const resp = await fetch('/api/process', {method:'POST', body:fd});
-    const data = await resp.json();
-    if (!resp.ok) { showStatus(data.error || 'Server error','error'); return }
-
-    // Store results and redirect to dashboard
-    sessionStorage.setItem('results', JSON.stringify(data));
-    window.location.href = '/dashboard';
-  } catch(err) {
-    showStatus('Network error: '+err.message, 'error');
-  } finally {
-    btn.disabled = false;
-    spinner.style.display = 'none';
-  }
-});
-
-// ===== Theme =====
-function applyTheme(theme) {
-  const isLight = theme === 'light';
-  document.body.classList.toggle('light', isLight);
-  document.getElementById('themeBtn').textContent = isLight ? '🌙' : '☀';
-  const mBtn = document.getElementById('modalThemeBtn');
-  if (mBtn) mBtn.textContent = isLight ? 'Switch to Dark' : 'Switch to Light';
-}
-function toggleTheme() {
-  const next = document.body.classList.contains('light') ? 'dark' : 'light';
-  localStorage.setItem('verity_theme', next);
-  applyTheme(next);
-}
-applyTheme(localStorage.getItem('verity_theme') || 'dark');
-
-// ===== Settings Modal =====
-async function openSettings() {
-  document.getElementById('settingsModal').classList.add('open');
-  document.getElementById('settingMsg').textContent = '';
-  try {
-    const res = await fetch('/api/settings');
-    const s = await res.json();
-    document.getElementById('setApiKey').textContent = s.api_key_configured ? '✅ Configured' : '⚠ Not set (fallback)';
-    document.getElementById('setBaseUrl').textContent = s.base_url;
-    document.getElementById('setCacheCount').textContent = s.cached_entries;
-  } catch (e) {
-    document.getElementById('settingMsg').textContent = 'Could not load settings.';
-  }
-}
-function closeSettings() {
-  document.getElementById('settingsModal').classList.remove('open');
-}
-async function clearCache() {
-  try {
-    const res = await fetch('/api/clear-cache', { method: 'POST' });
-    const data = await res.json();
-    document.getElementById('setCacheCount').textContent = '0';
-    document.getElementById('settingMsg').textContent = data.message || 'Cache cleared.';
-  } catch (e) {
-    document.getElementById('settingMsg').textContent = 'Failed to clear cache.';
-  }
-}
-</script>
-
 <!-- SETTINGS MODAL -->
 <div class="modal-backdrop" id="settingsModal" onclick="if(event.target===this)closeSettings()">
   <div class="modal">
@@ -337,7 +117,7 @@ async function clearCache() {
     </div>
     <div class="setting-row">
       <span>OpenAI Base URL</span>
-      <span id="setBaseUrl" style="font-size:12px;color:#64748b">-</span>
+      <span id="setBaseUrl" style="font-size:12px;color:var(--text-muted)">-</span>
     </div>
     <div class="setting-row">
       <span>LLM Response Cache (<span id="setCacheCount">0</span>)</span>
@@ -345,10 +125,13 @@ async function clearCache() {
     </div>
     <div class="setting-row">
       <span>Guardrails</span>
-      <span style="font-size:12px;color:#64748b">Temp 0 · Overlap ≥ 30% · Missing &gt; 5%</span>
+      <span style="font-size:12px;color:var(--text-muted)">Temp 0 · Overlap ≥ 30% · Missing &gt; 5%</span>
     </div>
     <div class="setting-msg" id="settingMsg"></div>
   </div>
 </div>
+
+<script src="/static/js/main.js"></script>
+<script src="/static/js/upload.js"></script>
 </body>
 </html>

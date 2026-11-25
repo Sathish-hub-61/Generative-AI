@@ -1,82 +1,88 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Documentation Results</title>
-    <style>
-        body {font-family: Arial, sans-serif; margin: 2rem;}
-        table {border-collapse: collapse; width: 100%;}
-        th, td {border: 1px solid #ddd; padding: 8px; text-align: left;}
-        th {background-color: #f2f2f2;}
-        .badge {padding: 2px 6px; border-radius: 4px; font-size: 0.9em; color: white;}
-        .doc {background-color: #28a745;}
-        .undoc {background-color: #ffc107; color: black;}
-        .section {margin-top: 2rem;}
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documentation Results</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="stylesheet" href="/static/css/results.css">
 </head>
 <body>
-<h1>Documentation Results</h1>
-<div class="section">
+
+<div class="results-container">
+  <div class="results-header">
+    <h1>Documentation Results</h1>
+  </div>
+
+  <div class="section">
     <h2>Summary</h2>
-    <p>Total fields: {{ summary.total_fields }}, Documented: {{ summary.documented }}, Undocumented: {{ summary.undocumented }}, Issues: {{ summary.issues }}</p>
-</div>
-<div class="section">
+    <p>Total fields: <strong>{{ summary.total_fields }}</strong>, Documented: <strong>{{ summary.documented }}</strong>, Undocumented: <strong>{{ summary.undocumented }}</strong>, Issues: <strong>{{ summary.issues }}</strong></p>
+  </div>
+
+  <div class="section">
     <h2>Dictionary</h2>
-    <table>
+    <div class="table-wrap">
+      <table>
         <thead>
-            <tr>
-                <th>Field</th><th>Observed type</th><th>Missing %</th><th>Distinct</th><th>Example values</th><th>Documented meaning</th><th>Source line</th><th>Status</th>
-            </tr>
+          <tr>
+            <th>Field</th><th>Observed type</th><th>Missing %</th><th>Distinct</th><th>Example values</th><th>Documented meaning</th><th>Source line</th><th>Status</th>
+          </tr>
         </thead>
         <tbody>
         {% for row in dict_rows %}
-            <tr>
-                <td>{{ row.Field }}</td>
-                <td>{{ row['Observed type'] }}</td>
-                <td>{{ row['Missing %'] }}</td>
-                <td>{{ row.Distinct }}</td>
-                <td>{{ row['Example values'] }}</td>
-                <td>{{ row['Documented meaning'] }}</td>
-                <td>{{ row['Source line'] }}</td>
-                <td>
-                    {% if row.Status == 'Documented' %}
-                        <span class="badge doc">Documented</span>
-                    {% else %}
-                        <span class="badge undoc">Undocumented – not inferred</span>
-                    {% endif %}
-                </td>
-            </tr>
+          <tr>
+            <td style="color:var(--text-primary);font-weight:600">{{ row.Field }}</td>
+            <td><span class="badge badge-blue">{{ row['Observed type'] }}</span></td>
+            <td>{{ row['Missing %'] }}</td>
+            <td>{{ row.Distinct }}</td>
+            <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis">{{ row['Example values'] }}</td>
+            <td style="max-width:320px">{{ row['Documented meaning'] }}</td>
+            <td style="font-size:11px;color:var(--text-dim);max-width:220px;overflow:hidden;text-overflow:ellipsis">{{ row['Source line'] }}</td>
+            <td>
+              {% if row.Status == 'Documented' %}
+                <span class="badge doc">Documented</span>
+              {% else %}
+                <span class="badge undoc">Undocumented – not inferred</span>
+              {% endif %}
+            </td>
+          </tr>
         {% endfor %}
         </tbody>
-    </table>
-    <form method="post" action="/download_dict" style="margin-top:1rem;">
-        <button type="submit">Download Dictionary CSV</button>
+      </table>
+    </div>
+    <form method="post" action="/download_dict" style="margin-top:1.2rem;">
+      <button type="submit">Download Dictionary CSV</button>
     </form>
     {% if unparsed %}
-    <details style="margin-top:1rem;">
-        <summary>Unparsed documentation lines ({{ unparsed|length }})</summary>
-        <pre>{{ unparsed|join('\n') }}</pre>
+    <details style="margin-top:1.2rem;font-size:13px;color:var(--text-muted)">
+      <summary style="cursor:pointer;color:var(--primary-500);font-weight:600">Unparsed documentation lines ({{ unparsed|length }})</summary>
+      <pre style="margin-top:8px;padding:12px;background:var(--bg-canvas);border:1px solid var(--border-subtle);border-radius:var(--radius-sm);overflow-x:auto">{{ unparsed|join('\n') }}</pre>
     </details>
     {% endif %}
-</div>
-<div class="section">
+  </div>
+
+  <div class="section">
     <h2>Limitations</h2>
     <div>{{ limitations_md|safe }}</div>
-    <form method="post" action="/download_lim" style="margin-top:1rem;">
-        <button type="submit">Download Limitations Report</button>
+    <form method="post" action="/download_lim" style="margin-top:1.2rem;">
+      <button type="submit">Download Limitations Report</button>
     </form>
-</div>
-<div class="section">
+  </div>
+
+  <div class="section">
     <h2>Guardrail Check</h2>
     {% if violations %}
-        <ul>
-        {% for v in violations %}
-            <li style="color:red;">{{ v }}</li>
-        {% endfor %}
-        </ul>
+      <ul class="violations-list">
+      {% for v in violations %}
+        <li>{{ v }}</li>
+      {% endfor %}
+      </ul>
     {% else %}
-        <p style="color:green;">All guardrails passed.</p>
+      <p class="pass-message">All guardrails passed successfully.</p>
     {% endif %}
+  </div>
 </div>
+
+<script src="/static/js/main.js"></script>
 </body>
 </html>

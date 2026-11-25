@@ -1,10 +1,10 @@
 import pandas as pd
 from pathlib import Path
 
-# Load sample CSV (use the dataset in the parent folder)
-csv_path = Path(r"C:\Generative AI\dataset.csv")
+# Load sample CSV
+csv_path = Path(__file__).parent / "data" / "dataset.csv"
 if not csv_path.exists():
-    csv_path = Path(r"C:\Generative AI\bank-doc-assistant\data\bank.csv")
+    csv_path = Path(__file__).parent / "data" / "bank.csv"
 
 df = pd.read_csv(csv_path)
 
@@ -23,7 +23,7 @@ from matcher import match
 # Process
 stats = profile(df)
 docs, unparsed = parse_docs(doc_text)
- documented, undocumented = match(list(df.columns), docs)
+documented, undocumented = match(list(df.columns), docs)
 
 print(f"Total columns: {len(df.columns)}")
 print(f"Documented: {len(documented)}")
