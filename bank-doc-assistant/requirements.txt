@@ -1,0 +1,5 @@
+flask
+pandas
+pydantic
+requests
+pypdf

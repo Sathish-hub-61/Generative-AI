@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verity – Bank Marketing Data Documentation Assistant</title>
+<style>
+/* ===== RESET & BASE ===== */
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#0a0e1a;color:#c8d6e5;min-height:100vh}
+
+/* ===== NAV ===== */
+nav{display:flex;align-items:center;justify-content:space-between;padding:14px 32px;background:#0f1322;border-bottom:1px solid #1a2035}
+.nav-brand{display:flex;align-items:center;gap:10px}
+.nav-brand .icon{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#2563eb,#1d4ed8);display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;font-weight:700}
+.nav-brand h1{font-size:16px;color:#fff;font-weight:600}
+.nav-brand p{font-size:11px;color:#64748b}
+.nav-links{display:flex;gap:6px}
+.nav-links a{padding:8px 18px;border-radius:6px;text-decoration:none;color:#94a3b8;font-size:13px;font-weight:500;transition:all .2s}
+.nav-links a.active{background:#1e293b;color:#3b82f6}
+.nav-links a:hover{color:#fff}
+.nav-right{display:flex;align-items:center;gap:12px}
+.theme-btn{background:none;border:1px solid #1e293b;border-radius:8px;width:36px;height:36px;cursor:pointer;color:#94a3b8;font-size:16px;display:flex;align-items:center;justify-content:center}
+
+/* ===== LAYOUT ===== */
+.container{max-width:1100px;margin:0 auto;padding:32px 24px}
+.page-header h2{font-size:26px;color:#fff;font-weight:700;margin-bottom:6px}
+.page-header p{font-size:14px;color:#64748b;margin-bottom:28px}
+.grid{display:grid;grid-template-columns:1.5fr 1fr;gap:24px}
+
+/* ===== CARDS ===== */
+.card{background:#111827;border:1px solid #1e293b;border-radius:12px;padding:24px}
+.card h3{font-size:16px;color:#fff;font-weight:600;display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.card h3 .req{font-size:11px;background:#1d4ed8;color:#fff;padding:2px 8px;border-radius:10px;font-weight:500}
+.card h3 .opt{font-size:11px;background:#374151;color:#94a3b8;padding:2px 8px;border-radius:10px;font-weight:500}
+.card p.sub{font-size:13px;color:#64748b;margin-bottom:16px}
+
+/* ===== DROP ZONE ===== */
+.dropzone{border:2px dashed #1e293b;border-radius:10px;padding:36px 20px;text-align:center;transition:all .25s;cursor:pointer;margin-bottom:8px}
+.dropzone:hover,.dropzone.dragover{border-color:#3b82f6;background:rgba(59,130,246,.06)}
+.dropzone .cloud{font-size:38px;color:#3b82f6;margin-bottom:8px}
+.dropzone .label{font-size:14px;color:#94a3b8;margin-bottom:12px}
+.dropzone .or{font-size:12px;color:#475569;margin-bottom:10px}
+.browse-btn{padding:8px 20px;background:#1e293b;border:1px solid #334155;border-radius:8px;color:#e2e8f0;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:background .2s}
+.browse-btn:hover{background:#2d3748}
+.dropzone .meta{font-size:11px;color:#475569;margin-top:10px}
+.file-info{display:none;padding:10px 14px;background:#1a2744;border:1px solid #1e3a5f;border-radius:8px;margin-top:10px;font-size:13px;color:#60a5fa;align-items:center;gap:8px}
+.file-info.show{display:flex}
+.file-info .remove{margin-left:auto;cursor:pointer;color:#ef4444;font-size:16px}
+
+/* ===== PASTE BOX ===== */
+.paste-section{margin-top:14px}
+.paste-section label{font-size:13px;color:#94a3b8;margin-bottom:6px;display:block}
+.paste-section textarea{width:100%;height:100px;background:#0f1322;border:1px solid #1e293b;border-radius:8px;color:#c8d6e5;padding:10px;font-size:13px;font-family:inherit;resize:vertical}
+.paste-section textarea:focus{outline:none;border-color:#3b82f6}
+
+/* ===== TARGET INPUT ===== */
+.target-section{margin-top:16px}
+.target-section label{font-size:13px;color:#94a3b8;margin-bottom:6px;display:block}
+.target-section input{width:100%;padding:10px 12px;background:#0f1322;border:1px solid #1e293b;border-radius:8px;color:#c8d6e5;font-size:13px}
+.target-section input:focus{outline:none;border-color:#3b82f6}
+
+/* ===== SIDEBAR ===== */
+.sidebar{display:flex;flex-direction:column;gap:20px}
+.guide-card{background:#111827;border:1px solid #1e293b;border-radius:12px;padding:20px}
+.guide-card h3{font-size:15px;color:#fff;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.guide-card h3 .g-icon{color:#3b82f6;font-size:18px}
+.guide-item{display:flex;align-items:flex-start;gap:8px;margin-bottom:10px;font-size:13px;color:#94a3b8;line-height:1.5}
+.guide-item .check{color:#22c55e;font-size:15px;flex-shrink:0;margin-top:1px}
+.step-item{display:flex;align-items:flex-start;gap:10px;margin-bottom:12px;font-size:13px;color:#94a3b8;line-height:1.5}
+.step-num{width:24px;height:24px;border-radius:50%;background:#1d4ed8;color:#fff;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+
+/* ===== BUTTONS ===== */
+.actions{display:flex;gap:12px;margin-top:16px}
+.btn-primary{flex:1;padding:14px;background:linear-gradient(135deg,#2563eb,#1d4ed8);border:none;border-radius:10px;color:#fff;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity .2s}
+.btn-primary:hover{opacity:.9}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed}
+.btn-secondary{padding:14px 24px;background:#1e293b;border:1px solid #334155;border-radius:10px;color:#94a3b8;font-size:14px;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:6px;transition:background .2s}
+.btn-secondary:hover{background:#2d3748}
+
+/* ===== SPINNER ===== */
+.spinner{display:none;width:18px;height:18px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ===== STATUS BAR ===== */
+.status-bar{display:none;margin-top:16px;padding:12px 16px;border-radius:8px;font-size:13px;font-weight:500}
+.status-bar.info{display:block;background:#172554;border:1px solid #1e3a5f;color:#60a5fa}
+.status-bar.error{display:block;background:#450a0a;border:1px solid #7f1d1d;color:#fca5a5}
+.status-bar.success{display:block;background:#052e16;border:1px solid #166534;color:#86efac}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:768px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">
+    <div class="icon">V</div>
+    <div>
+      <h1>Verity</h1>
+      <p>Bank Marketing Data Documentation Assistant</p>
+    </div>
+  </div>
+  <div class="nav-links">
+    <a href="/" class="active">Upload</a>
+    <a href="/dashboard">Dashboard</a>
+    <a href="#" onclick="alert('Settings coming soon')">Settings</a>
+  </div>
+  <div class="nav-right">
+    <button class="theme-btn" title="Toggle theme">☀</button>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div class="container">
+  <div class="page-header">
+    <h2>Upload Dataset</h2>
+    <p>Upload your bank marketing campaign dataset and (optional) field documentation.</p>
+  </div>
+
+  <form id="mainForm" enctype="multipart/form-data">
+    <div class="grid">
+      <!-- LEFT COLUMN -->
+      <div>
+        <!-- CSV Upload Card -->
+        <div class="card" style="margin-bottom:20px">
+          <h3>
+            <span style="color:#3b82f6;font-size:20px">📄</span>
+            Bank Marketing Dataset (CSV)
+            <span class="req">Required</span>
+          </h3>
+          <p class="sub">Upload the campaign dataset containing fields and records.</p>
+          <div class="dropzone" id="csvDrop" onclick="document.getElementById('csvInput').click()">
+            <div class="cloud">☁&#xFE0E;↑</div>
+            <div class="label">Drag and drop your CSV file here</div>
+            <div class="or">or</div>
+            <button type="button" class="browse-btn">📁 Browse Files</button>
+            <div class="meta">Supported format: .csv &nbsp;|&nbsp; Max size: 100 MB</div>
+          </div>
+          <input type="file" id="csvInput" name="csv_file" accept=".csv" hidden>
+          <div class="file-info" id="csvInfo">
+            <span id="csvName"></span>
+            <span class="remove" onclick="clearFile('csv')">&times;</span>
+          </div>
+        </div>
+
+        <!-- Doc Upload Card -->
+        <div class="card">
+          <h3>
+            <span style="color:#3b82f6;font-size:20px">📋</span>
+            Field Documentation (Metadata)
+            <span class="opt">Optional</span>
+          </h3>
+          <p class="sub">Upload a file containing field definitions, units or business rules.</p>
+          <div class="dropzone" id="docDrop" onclick="document.getElementById('docInput').click()">
+            <div class="cloud">☁&#xFE0E;↑</div>
+            <div class="label">Drag and drop metadata file here</div>
+            <div class="or">or</div>
+            <button type="button" class="browse-btn">📁 Browse Files</button>
+            <div class="meta">Supported formats: .txt, .pdf &nbsp;|&nbsp; Max size: 50 MB</div>
+          </div>
+          <input type="file" id="docInput" name="doc_file" accept=".txt,.pdf" hidden>
+          <div class="file-info" id="docInfo">
+            <span id="docName"></span>
+            <span class="remove" onclick="clearFile('doc')">&times;</span>
+          </div>
+
+          <div class="paste-section">
+            <label>Or paste documentation text:</label>
+            <textarea id="docText" name="doc_text" placeholder="age: Age of the client in years&#10;job: Type of job&#10;marital - Marital status (single, married, divorced)"></textarea>
+          </div>
+
+          <div class="target-section">
+            <label>Target column for class-imbalance check (optional):</label>
+            <input type="text" id="targetCol" name="target_column" placeholder="e.g. conversion_status">
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN (sidebar) -->
+      <div class="sidebar">
+        <div class="guide-card">
+          <h3><span class="g-icon">ℹ</span> Upload Guidelines</h3>
+          <div class="guide-item"><span class="check">✓</span> Dataset must be in CSV format.</div>
+          <div class="guide-item"><span class="check">✓</span> Column names should be in the first row.</div>
+          <div class="guide-item"><span class="check">✓</span> Optional: upload field documentation for accurate descriptions.</div>
+          <div class="guide-item"><span class="check">✓</span> Do not include sensitive personal information.</div>
+        </div>
+
+        <div class="guide-card">
+          <h3><span class="g-icon">📊</span> After Upload</h3>
+          <div class="step-item"><span class="step-num">1</span> Validate dataset (format, columns, encoding)</div>
+          <div class="step-item"><span class="step-num">2</span> Preview data (first few records)</div>
+          <div class="step-item"><span class="step-num">3</span> Analyze dataset (profiling &amp; quality checks)</div>
+          <div class="step-item"><span class="step-num">4</span> Generate Data Dictionary &amp; Limitations Report</div>
+        </div>
+
+        <div class="actions">
+          <button type="submit" class="btn-primary" id="submitBtn">
+            <span>▶</span> Validate &amp; Analyze
+            <div class="spinner" id="spinner"></div>
+          </button>
+          <button type="button" class="btn-secondary" onclick="clearAll()">
+            🗑 Clear
+          </button>
+        </div>
+
+        <div class="status-bar" id="statusBar"></div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<script>
+// ===== Drag & drop + file selection =====
+function setupDrop(dropId, inputId, infoId, nameId) {
+  const drop = document.getElementById(dropId);
+  const input = document.getElementById(inputId);
+  const info = document.getElementById(infoId);
+  const nameEl = document.getElementById(nameId);
+
+  ['dragenter','dragover'].forEach(e => drop.addEventListener(e, ev => {ev.preventDefault();drop.classList.add('dragover')}));
+  ['dragleave','drop'].forEach(e => drop.addEventListener(e, ev => {ev.preventDefault();drop.classList.remove('dragover')}));
+  drop.addEventListener('drop', ev => {
+    if(ev.dataTransfer.files.length){input.files = ev.dataTransfer.files; showFile(input,info,nameEl)}
+  });
+  input.addEventListener('change', () => showFile(input,info,nameEl));
+}
+function showFile(input,info,nameEl){
+  if(input.files.length){nameEl.textContent='📄 '+input.files[0].name+' ('+formatSize(input.files[0].size)+')';info.classList.add('show')}
+}
+function formatSize(b){if(b<1024)return b+' B';if(b<1048576)return (b/1024).toFixed(1)+' KB';return (b/1048576).toFixed(1)+' MB'}
+function clearFile(type){
+  const input=document.getElementById(type+'Input');
+  const info=document.getElementById(type+'Info');
+  input.value='';info.classList.remove('show');
+}
+function clearAll(){clearFile('csv');clearFile('doc');document.getElementById('docText').value='';document.getElementById('targetCol').value='';hideStatus()}
+
+setupDrop('csvDrop','csvInput','csvInfo','csvName');
+setupDrop('docDrop','docInput','docInfo','docName');
+
+// ===== Status bar =====
+function showStatus(msg,type){const s=document.getElementById('statusBar');s.className='status-bar '+type;s.textContent=msg}
+function hideStatus(){document.getElementById('statusBar').className='status-bar'}
+
+// ===== Form submit =====
+document.getElementById('mainForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const btn = document.getElementById('submitBtn');
+  const spinner = document.getElementById('spinner');
+
+  // Validation
+  const csvInput = document.getElementById('csvInput');
+  const docInput = document.getElementById('docInput');
+  const docText  = document.getElementById('docText').value.trim();
+
+  if (!csvInput.files.length) { showStatus('Please upload a CSV dataset.','error'); return }
+  if (!docInput.files.length && !docText) { showStatus('Please upload documentation or paste text.','error'); return }
+
+  btn.disabled = true;
+  spinner.style.display = 'inline-block';
+  showStatus('Processing dataset… This may take a moment.','info');
+
+  const fd = new FormData(this);
+
+  try {
+    const resp = await fetch('/api/process', {method:'POST', body:fd});
+    const data = await resp.json();
+    if (!resp.ok) { showStatus(data.error || 'Server error','error'); return }
+
+    // Store results and redirect to dashboard
+    sessionStorage.setItem('results', JSON.stringify(data));
+    window.location.href = '/dashboard';
+  } catch(err) {
+    showStatus('Network error: '+err.message, 'error');
+  } finally {
+    btn.disabled = false;
+    spinner.style.display = 'none';
+  }
+});
+</script>
+</body>
+</html>

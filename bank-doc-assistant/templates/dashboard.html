@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verity – Dashboard</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#0a0e1a;color:#c8d6e5;min-height:100vh}
+
+/* NAV */
+nav{display:flex;align-items:center;justify-content:space-between;padding:14px 32px;background:#0f1322;border-bottom:1px solid #1a2035}
+.nav-brand{display:flex;align-items:center;gap:10px}
+.nav-brand .icon{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#2563eb,#1d4ed8);display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;font-weight:700}
+.nav-brand h1{font-size:16px;color:#fff;font-weight:600}
+.nav-brand p{font-size:11px;color:#64748b}
+.nav-links{display:flex;gap:6px}
+.nav-links a{padding:8px 18px;border-radius:6px;text-decoration:none;color:#94a3b8;font-size:13px;font-weight:500;transition:all .2s}
+.nav-links a.active{background:#1e293b;color:#3b82f6}
+.nav-links a:hover{color:#fff}
+.theme-btn{background:none;border:1px solid #1e293b;border-radius:8px;width:36px;height:36px;cursor:pointer;color:#94a3b8;font-size:16px;display:flex;align-items:center;justify-content:center}
+
+/* CONTAINER */
+.container{max-width:1200px;margin:0 auto;padding:24px}
+
+/* HEADER ROW */
+.dash-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px}
+.dash-header h2{font-size:24px;color:#fff;font-weight:700}
+.dash-header .file-info{font-size:13px;color:#64748b}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap}
+.toolbar button{padding:8px 14px;background:#1e293b;border:1px solid #334155;border-radius:8px;color:#c8d6e5;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:5px;transition:background .2s}
+.toolbar button:hover{background:#2d3748}
+
+/* STAT CARDS */
+.stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px}
+.stat-card{background:#111827;border:1px solid #1e293b;border-radius:12px;padding:20px}
+.stat-card .label{font-size:12px;color:#3b82f6;text-transform:uppercase;font-weight:600;letter-spacing:.5px;margin-bottom:4px}
+.stat-card .value{font-size:28px;color:#fff;font-weight:700}
+.stat-card .meta{font-size:11px;color:#475569;margin-top:4px}
+
+/* TABS */
+.tabs{display:flex;gap:4px;margin-bottom:20px;border-bottom:1px solid #1e293b;padding-bottom:0}
+.tab-btn{padding:12px 20px;background:none;border:none;border-bottom:2px solid transparent;color:#94a3b8;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s}
+.tab-btn.active{color:#3b82f6;border-bottom-color:#3b82f6}
+.tab-btn:hover{color:#e2e8f0}
+.tab-content{display:none}
+.tab-content.active{display:block}
+
+/* TABLE */
+.table-wrap{overflow-x:auto;border-radius:10px;border:1px solid #1e293b}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:#1e293b;color:#94a3b8;text-align:left;padding:12px 14px;font-weight:600;white-space:nowrap;position:sticky;top:0}
+td{padding:10px 14px;border-top:1px solid #1a2035;color:#c8d6e5;vertical-align:top}
+tr:hover{background:rgba(59,130,246,.04)}
+.badge{padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;white-space:nowrap}
+.badge-green{background:#065f46;color:#6ee7b7}
+.badge-amber{background:#78350f;color:#fbbf24}
+.badge-red{background:#7f1d1d;color:#fca5a5}
+.badge-blue{background:#1e3a5f;color:#93c5fd}
+.badge-gray{background:#374151;color:#9ca3af}
+
+/* FINDINGS */
+.finding{background:#111827;border:1px solid #1e293b;border-radius:10px;padding:16px;margin-bottom:12px}
+.finding-header{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.finding-title{font-size:14px;color:#fff;font-weight:600;flex:1}
+.severity{padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;text-transform:uppercase}
+.sev-high{background:#7f1d1d;color:#fca5a5}
+.sev-medium{background:#78350f;color:#fbbf24}
+.sev-low{background:#374151;color:#9ca3af}
+.finding details{font-size:13px;color:#94a3b8;cursor:pointer}
+.finding details summary{font-weight:500;color:#60a5fa;margin-bottom:4px}
+.finding details p{padding:8px 0 0 0;line-height:1.6}
+
+/* GUARDRAIL */
+.guard-item{display:flex;align-items:center;gap:10px;padding:10px 14px;background:#111827;border:1px solid #1e293b;border-radius:8px;margin-bottom:8px;font-size:13px}
+.guard-icon{font-size:16px}
+.guard-pass .guard-icon{color:#22c55e}
+.guard-fail .guard-icon{color:#ef4444}
+.guard-skip .guard-icon{color:#94a3b8}
+
+/* EMPTY STATE */
+.empty{text-align:center;padding:60px 20px;color:#475569;font-size:15px}
+.empty a{color:#3b82f6;text-decoration:none}
+
+@media(max-width:768px){.stat-row{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">
+    <div class="icon">V</div>
+    <div><h1>Verity</h1><p>Bank Marketing Data Documentation Assistant</p></div>
+  </div>
+  <div class="nav-links">
+    <a href="/">Upload</a>
+    <a href="/dashboard" class="active">Dashboard</a>
+    <a href="#">Settings</a>
+  </div>
+  <div><button class="theme-btn">☀</button></div>
+</nav>
+
+<div class="container" id="app">
+  <!-- Filled by JS -->
+  <div class="empty" id="emptyState">
+    <p>No results to display yet.<br><a href="/">← Go to Upload page</a> to analyze a dataset.</p>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const raw = sessionStorage.getItem('results');
+  if (!raw) return;
+  const R = JSON.parse(raw);
+  document.getElementById('emptyState').style.display = 'none';
+
+  const app = document.getElementById('app');
+
+  // ---- Header + Toolbar ----
+  app.innerHTML = `
+  <div class="dash-header">
+    <div>
+      <h2>Dashboard</h2>
+      <div class="file-info">${R.summary.total_rows.toLocaleString()} rows · ${R.summary.total_fields} columns · API calls: ${R.summary.api_calls}</div>
+    </div>
+    <div class="toolbar">
+      <button onclick="location.href='/api/download/dict'">↓ Export CSV</button>
+      <button onclick="location.href='/api/download/report'">↓ Export Report</button>
+      <button onclick="sessionStorage.clear();location.href='/'">🗑 Clear data</button>
+    </div>
+  </div>
+
+  <!-- STAT CARDS -->
+  <div class="stat-row">
+    <div class="stat-card"><div class="label">Total Fields</div><div class="value">${R.summary.total_fields}</div><div class="meta">${R.summary.total_rows.toLocaleString()} rows in dataset</div></div>
+    <div class="stat-card"><div class="label">Documented</div><div class="value">${R.summary.documented}</div><div class="meta">Fields with documentation matched</div></div>
+    <div class="stat-card"><div class="label">Undocumented</div><div class="value">${R.summary.undocumented}</div><div class="meta">Meaning not inferred</div></div>
+    <div class="stat-card"><div class="label">Issues Found</div><div class="value">${R.summary.issues}</div><div class="meta">Across all quality rules</div></div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="dict">📋 Dictionary</button>
+    <button class="tab-btn" data-tab="lim">⚠ Limitations</button>
+    <button class="tab-btn" data-tab="guard">🛡 Guardrail Check</button>
+  </div>
+
+  <div class="tab-content active" id="tab-dict"></div>
+  <div class="tab-content" id="tab-lim"></div>
+  <div class="tab-content" id="tab-guard"></div>
+  `;
+
+  // ---- Dictionary Table ----
+  let tableHtml = '<div class="table-wrap"><table><thead><tr><th>Field</th><th>Type</th><th>Missing %</th><th>Distinct</th><th>Example Values</th><th>Documented Meaning</th><th>Source Line</th><th>Status</th></tr></thead><tbody>';
+  R.dictionary.forEach(r => {
+    const badge = r.Status === 'Documented'
+      ? '<span class="badge badge-green">Documented</span>'
+      : '<span class="badge badge-amber">Undocumented – not inferred</span>';
+    tableHtml += '<tr>'
+      + '<td style="color:#fff;font-weight:500">'+r.Field+'</td>'
+      + '<td><span class="badge badge-blue">'+r['Observed type']+'</span></td>'
+      + '<td>'+r['Missing %']+'</td>'
+      + '<td>'+r.Distinct+'</td>'
+      + '<td style="max-width:200px;overflow:hidden;text-overflow:ellipsis">'+r['Example values']+'</td>'
+      + '<td style="max-width:300px">'+r['Documented meaning']+'</td>'
+      + '<td style="font-size:11px;color:#475569;max-width:220px;overflow:hidden;text-overflow:ellipsis">'+r['Source line']+'</td>'
+      + '<td>'+badge+'</td>'
+      + '</tr>';
+  });
+  tableHtml += '</tbody></table></div>';
+
+  if (R.unparsed_lines && R.unparsed_lines.length) {
+    tableHtml += '<details style="margin-top:14px;font-size:13px;color:#94a3b8"><summary style="cursor:pointer;color:#60a5fa">Unparsed documentation lines ('+R.unparsed_lines.length+')</summary><pre style="margin-top:8px;padding:12px;background:#111827;border-radius:8px;overflow-x:auto">'+R.unparsed_lines.join('\n')+'</pre></details>';
+  }
+  document.getElementById('tab-dict').innerHTML = tableHtml;
+
+  // ---- Limitations ----
+  let limHtml = '';
+  if (R.findings.length === 0) {
+    limHtml = '<div class="finding"><p style="color:#22c55e">No limitations detected.</p></div>';
+  } else {
+    R.findings.forEach((f,i) => {
+      const sevClass = f.severity === 'high' ? 'sev-high' : f.severity === 'medium' ? 'sev-medium' : 'sev-low';
+      limHtml += '<div class="finding">'
+        + '<div class="finding-header"><span class="finding-title">'+(i+1)+'. '+f.title+'</span><span class="severity '+sevClass+'">'+f.severity+'</span><span class="badge badge-gray">'+f.rule_id+'</span></div>'
+        + '<details><summary>Evidence</summary><p>'+f.evidence+'</p></details>'
+        + '</div>';
+    });
+  }
+  document.getElementById('tab-lim').innerHTML = limHtml;
+
+  // ---- Guardrail ----
+  let guardHtml = '';
+  R.violations.forEach(v => {
+    let cls = 'guard-pass', icon = '✅';
+    if (v.status === 'FAIL') { cls = 'guard-fail'; icon = '❌'; }
+    else if (v.status === 'SKIP') { cls = 'guard-skip'; icon = '⏭'; }
+    guardHtml += '<div class="guard-item '+cls+'"><span class="guard-icon">'+icon+'</span><strong>'+v.field+'</strong>&nbsp;–&nbsp;'+v.check+': '+v.detail+'</div>';
+  });
+  document.getElementById('tab-guard').innerHTML = guardHtml || '<p style="color:#22c55e;padding:20px">All guardrails passed.</p>';
+
+  // ---- Tab switching ----
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('tab-'+btn.dataset.tab).classList.add('active');
+    });
+  });
+});
+</script>
+</body>
+</html>
