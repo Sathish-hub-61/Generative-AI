@@ -157,12 +157,14 @@ document.addEventListener('DOMContentLoaded', () => {
     <button class="tab-btn" data-tab="lim">⚠ Limitations</button>
     <button class="tab-btn" data-tab="guard">🛡 Guardrail Check</button>
     <button class="tab-btn" data-tab="ai">🤖 AI Assistant</button>
+    <button class="tab-btn" data-tab="viz">📊 Visualizations</button>
   </div>
 
   <div class="tab-content active" id="tab-dict"></div>
   <div class="tab-content" id="tab-lim"></div>
   <div class="tab-content" id="tab-guard"></div>
   <div class="tab-content" id="tab-ai"></div>
+  <div class="tab-content" id="tab-viz"></div>
   `;
 
   // ---- Tab 1: Dictionary Table ----
@@ -240,14 +242,30 @@ document.addEventListener('DOMContentLoaded', () => {
     </div>
   `;
 
+  // ---- Initialize Visualizations ----
+  if (typeof initVisualizations === 'function') {
+    initVisualizations(R);
+  }
+
   // ---- Tab Switching ----
+  function activateTab(tabName) {
+    const btn = document.querySelector(`.tab-btn[data-tab="${tabName}"]`);
+    const target = document.getElementById('tab-' + tabName);
+    if (!btn || !target) return;
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+    target.classList.add('active');
+    if (tabName === 'viz' && typeof activateVisualizationsTab === 'function') {
+      activateVisualizationsTab();
+    }
+  }
+
   document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-      btn.classList.add('active');
-      const target = document.getElementById('tab-' + btn.dataset.tab);
-      if (target) target.classList.add('active');
-    });
+    btn.addEventListener('click', () => activateTab(btn.dataset.tab));
   });
+
+  if (window.location.hash === '#viz' || new URLSearchParams(window.location.search).get('tab') === 'viz') {
+    activateTab('viz');
+  }
 });

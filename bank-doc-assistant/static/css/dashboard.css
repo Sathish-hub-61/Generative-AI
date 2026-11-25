@@ -118,6 +118,7 @@
 /* Tabs */
 .tabs {
   display: flex;
+  flex-wrap: wrap;
   gap: 6px;
   margin-bottom: 22px;
   border-bottom: 1px solid var(--border-subtle);
@@ -407,5 +408,309 @@
   .toolbar button {
     flex: 1;
     justify-content: center;
+  }
+}
+
+/* ==========================================================================
+   Visualizations Tab Styles
+   ========================================================================== */
+.viz-loading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  margin-bottom: 18px;
+  border-radius: var(--radius-sm);
+  background: var(--info-bg);
+  border: 1px solid var(--info-border);
+  color: var(--info-text);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.viz-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(59, 130, 246, 0.25);
+  border-top-color: var(--primary-500);
+  border-radius: 50%;
+  animation: spin 0.65s linear infinite;
+}
+
+.viz-error-card {
+  padding: 14px 18px;
+  margin-bottom: 18px;
+  border-radius: var(--radius-md);
+  background: var(--danger-bg);
+  border: 1px solid var(--danger-border);
+  color: var(--danger-text);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.viz-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 22px 24px;
+  box-shadow: var(--shadow-card);
+  margin-bottom: 20px;
+  transition: var(--transition);
+}
+
+.viz-card:hover {
+  border-color: var(--border-muted);
+}
+
+.viz-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.viz-grid-2 > .viz-card {
+  margin-bottom: 20px;
+}
+
+.viz-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.viz-card-head h3 {
+  font-size: 16px;
+  color: var(--text-primary);
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.viz-sub {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.viz-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+  align-items: center;
+}
+
+.viz-chart-box {
+  position: relative;
+  width: 100%;
+  min-height: 240px;
+}
+
+.viz-chart-doughnut {
+  height: 290px;
+  max-width: 440px;
+  margin: 0 auto;
+}
+
+.viz-plotly-box {
+  width: 100%;
+  position: relative;
+}
+
+.viz-subpanel {
+  background: var(--bg-canvas);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 14px;
+}
+
+/* Data Quality KPIs & Issues */
+.viz-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.viz-kpi-card {
+  background: var(--bg-canvas);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 16px;
+}
+
+.viz-kpi-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--primary-500);
+  margin-bottom: 6px;
+}
+
+.viz-kpi-val {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.1;
+}
+
+.viz-kpi-sub {
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-top: 6px;
+}
+
+.viz-issues-box {
+  background: var(--bg-canvas);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 16px;
+}
+
+.viz-issues-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.viz-issues-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.viz-sev-pills {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.viz-issues-list {
+  max-height: 260px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.viz-issue-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+}
+
+.viz-issue-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.viz-issue-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.viz-issue-evidence {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 2px;
+  word-break: break-word;
+}
+
+/* Column Selectors & Mini Stats */
+.viz-select-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.viz-select-wrap label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.viz-select {
+  padding: 8px 14px;
+  background: var(--bg-input);
+  border: 1px solid var(--border-muted);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 500;
+  min-width: 190px;
+  cursor: pointer;
+}
+
+.viz-select:focus {
+  outline: none;
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px var(--primary-glow);
+}
+
+.viz-mini-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 10px;
+}
+
+.viz-mini-stat {
+  background: var(--bg-canvas);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.viz-mini-stat span {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+}
+
+.viz-mini-stat strong {
+  font-size: 16px;
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+/* Disclaimer & Empty States */
+.viz-disclaimer {
+  padding: 10px 14px;
+  margin-bottom: 14px;
+  border-radius: var(--radius-sm);
+  background: var(--warning-bg);
+  border: 1px solid var(--warning-border);
+  color: var(--warning-text);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.viz-empty-inline {
+  padding: 28px 16px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 13px;
+  background: var(--bg-canvas);
+  border: 1px dashed var(--border-subtle);
+  border-radius: var(--radius-md);
+}
+
+@media (max-width: 900px) {
+  .viz-grid-2 {
+    grid-template-columns: 1fr;
   }
 }

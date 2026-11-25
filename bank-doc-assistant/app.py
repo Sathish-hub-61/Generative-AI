@@ -13,6 +13,7 @@ from validator import validate
 from pii import detect_pii
 from governance import governance_scores, confidence_score
 from audit import log_event
+from visualizer import compute_visualizations
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
@@ -104,13 +105,15 @@ def api_process():
     limitations_md = narrate(findings)
     violations = validate(dict_rows, findings)
     gs = governance_scores(len(df.columns), len(documented), findings)
+    visualizations = compute_visualizations(df, stats, documented, undocumented, findings)
     summary = {
         "total_fields": len(df.columns), "total_rows": len(df),
         "documented": len(documented), "undocumented": len(undocumented),
         "issues": len(findings), "api_calls": get_api_call_count(), **gs,
     }
     _last_results = {"summary": summary, "dictionary": dict_rows, "findings": findings,
-                     "limitations_md": limitations_md, "dict_rows": dict_rows}
+                     "limitations_md": limitations_md, "dict_rows": dict_rows,
+                     "visualizations": visualizations}
     try:
         ctx_path = Path(__file__).parent / ".last_context.json"
         ctx_path.write_text(json.dumps({"summary": summary, "dictionary": dict_rows,
@@ -119,7 +122,8 @@ def api_process():
         pass
     log_event("process", {"summary": summary})
     return jsonify({"summary": summary, "dictionary": dict_rows, "unparsed_lines": unparsed,
-                    "findings": findings, "limitations_md": limitations_md, "violations": violations})
+                    "findings": findings, "limitations_md": limitations_md, "violations": violations,
+                    "visualizations": visualizations})
 
 @app.route("/api/download/dict")
 def download_dict():
@@ -184,6 +188,14 @@ def api_ask():
 @app.route("/api/metrics")
 def api_metrics():
     return jsonify(_last_results.get("summary", {}))
+
+
+@app.route("/api/visualizations")
+def api_visualizations():
+    viz = _last_results.get("visualizations")
+    if not viz:
+        return jsonify({"error": "No visualization data available. Please upload and analyze a dataset first."}), 404
+    return jsonify(viz)
 
 @app.route("/api/audit-log")
 def api_audit_log():
