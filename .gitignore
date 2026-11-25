@@ -7,3 +7,7 @@ __pycache__/
 *.pyc
 venv/
 .kilocode/
+.last_dataset.csv
+**/.last_dataset.csv
+.last_context.json
+**/.last_context.json

@@ -17,7 +17,7 @@ from flask import Flask, render_template, request, jsonify, send_file, session
 from profiler import profile
 from doc_parser import parse_docs
 from matcher import match
-from llm import describe_field, narrate, reset_api_call_count, get_api_call_count
+from llm import describe_field, narrate, reset_api_call_count, get_api_call_count, answer_dataset_query
 from limitations import find_limitations
 from validator import validate
 
@@ -67,9 +67,6 @@ def api_process():
             doc_text = doc_file.read().decode("utf-8", errors="ignore")
     if not doc_text:
         doc_text = request.form.get("doc_text", "")
-
-    if not doc_text.strip():
-        return jsonify({"error": "Upload documentation or paste text"}), 400
 
     target_column = request.form.get("target_column", "").strip() or None
 
@@ -130,12 +127,23 @@ def api_process():
         "api_calls": get_api_call_count(),
     }
 
-    # Cache for downloads
+    # Cache for downloads & AI assistant
     _last_results = {
-        "dict_rows": dict_rows,
-        "limitations_md": limitations_md,
         "summary": summary,
+        "dictionary": dict_rows,
+        "findings": findings,
+        "limitations_md": limitations_md,
+        "dict_rows": dict_rows,
     }
+    try:
+        ctx_path = Path(__file__).parent / ".last_context.json"
+        ctx_path.write_text(json.dumps({
+            "summary": summary,
+            "dictionary": dict_rows,
+            "findings": findings,
+        }, ensure_ascii=False), encoding="utf-8")
+    except Exception:
+        pass
 
     return jsonify({
         "summary": summary,
@@ -173,6 +181,53 @@ def download_report():
         as_attachment=True,
         download_name="limitations_report.md",
     )
+
+
+@app.route("/api/ask", methods=["POST"])
+def api_ask():
+    data = request.get_json(silent=True) or {}
+    question = (data.get("question") or "").strip()
+    if not question:
+        return jsonify({"error": "Please enter a question."}), 400
+
+    # Prefer client-sent context or in-memory/disk context
+    context = data.get("context")
+    if not context:
+        if _last_results.get("dictionary"):
+            context = {
+                "summary": _last_results.get("summary", {}),
+                "dictionary": _last_results.get("dictionary", []),
+                "findings": _last_results.get("findings", []),
+            }
+        else:
+            ctx_path = Path(__file__).parent / ".last_context.json"
+            if ctx_path.exists():
+                context = json.loads(ctx_path.read_text(encoding="utf-8"))
+    if not context:
+        return jsonify({"error": "No dataset analyzed yet. Please upload a CSV first."}), 400
+
+    res = answer_dataset_query(question, context)
+    return jsonify(res)
+
+
+@app.route("/api/settings")
+def get_settings():
+    from llm import CACHE_PATH, _load_cache
+    cache = _load_cache()
+    return jsonify({
+        "api_key_configured": bool(os.getenv("FREELLMAPI_KEY") or os.getenv("ANTHROPIC_API_KEY")),
+        "base_url": os.getenv("OPENAI_BASE_URL", "https://api.freellm.com/v1"),
+        "cached_entries": len(cache),
+        "cache_file": str(CACHE_PATH.name),
+    })
+
+
+@app.route("/api/clear-cache", methods=["POST"])
+def clear_cache():
+    from llm import CACHE_PATH
+    if CACHE_PATH.exists():
+        CACHE_PATH.unlink()
+    return jsonify({"ok": True, "message": "LLM cache cleared."})
 
 
 if __name__ == "__main__":

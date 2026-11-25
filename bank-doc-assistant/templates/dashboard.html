@@ -6,7 +6,7 @@
 <title>Verity – Dashboard</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Segoe UI',system-ui,sans-serif;background:#0a0e1a;color:#c8d6e5;min-height:100vh}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#0a0e1a;color:#c8d6e5;min-height:100vh;transition:background .2s,color .2s}
 
 /* NAV */
 nav{display:flex;align-items:center;justify-content:space-between;padding:14px 32px;background:#0f1322;border-bottom:1px solid #1a2035}
@@ -15,10 +15,11 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:14px 3
 .nav-brand h1{font-size:16px;color:#fff;font-weight:600}
 .nav-brand p{font-size:11px;color:#64748b}
 .nav-links{display:flex;gap:6px}
-.nav-links a{padding:8px 18px;border-radius:6px;text-decoration:none;color:#94a3b8;font-size:13px;font-weight:500;transition:all .2s}
-.nav-links a.active{background:#1e293b;color:#3b82f6}
-.nav-links a:hover{color:#fff}
+.nav-links a,.nav-links button.nav-btn{padding:8px 18px;border-radius:6px;text-decoration:none;color:#94a3b8;font-size:13px;font-weight:500;transition:all .2s;background:none;border:none;cursor:pointer;font-family:inherit}
+.nav-links a.active,.nav-links button.nav-btn.active{background:#1e293b;color:#3b82f6}
+.nav-links a:hover,.nav-links button.nav-btn:hover{color:#fff}
 .theme-btn{background:none;border:1px solid #1e293b;border-radius:8px;width:36px;height:36px;cursor:pointer;color:#94a3b8;font-size:16px;display:flex;align-items:center;justify-content:center}
+.theme-btn:hover{border-color:#3b82f6;color:#fff}
 
 /* CONTAINER */
 .container{max-width:1200px;margin:0 auto;padding:24px}
@@ -78,9 +79,62 @@ tr:hover{background:rgba(59,130,246,.04)}
 .guard-fail .guard-icon{color:#ef4444}
 .guard-skip .guard-icon{color:#94a3b8}
 
+/* AI ASSISTANT */
+.chat-box{background:#111827;border:1px solid #1e293b;border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:14px}
+.chat-chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{padding:6px 12px;background:#1e293b;border:1px solid #334155;border-radius:16px;color:#93c5fd;font-size:12px;cursor:pointer;transition:all .2s}
+.chip:hover{background:#2563eb;color:#fff;border-color:#2563eb}
+.chat-messages{min-height:220px;max-height:420px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding:8px 4px}
+.msg{padding:12px 14px;border-radius:10px;font-size:13px;line-height:1.55;max-width:85%;white-space:pre-wrap}
+.msg-user{align-self:flex-end;background:#1d4ed8;color:#fff}
+.msg-ai{align-self:flex-start;background:#0f172a;border:1px solid #1e293b;color:#e2e8f0}
+.msg-meta{font-size:10px;color:#64748b;margin-top:4px}
+.chat-input-row{display:flex;gap:10px}
+.chat-input-row input{flex:1;padding:12px 14px;background:#0f1322;border:1px solid #1e293b;border-radius:8px;color:#e2e8f0;font-size:13px}
+.chat-input-row input:focus{outline:none;border-color:#3b82f6}
+.chat-send{padding:12px 20px;background:linear-gradient(135deg,#2563eb,#1d4ed8);border:none;border-radius:8px;color:#fff;font-size:13px;font-weight:600;cursor:pointer}
+.chat-send:disabled{opacity:.5;cursor:not-allowed}
+
 /* EMPTY STATE */
 .empty{text-align:center;padding:60px 20px;color:#475569;font-size:15px}
 .empty a{color:#3b82f6;text-decoration:none}
+
+/* MODAL */
+.modal-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:100;align-items:center;justify-content:center;padding:16px}
+.modal-backdrop.open{display:flex}
+.modal{background:#111827;border:1px solid #1e293b;border-radius:14px;width:100%;max-width:480px;padding:24px;color:#c8d6e5}
+.modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.modal-head h3{font-size:18px;color:#fff}
+.modal-close{background:none;border:none;color:#94a3b8;font-size:20px;cursor:pointer}
+.setting-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid #1e293b;font-size:13px}
+.setting-row:last-child{border-bottom:none}
+.setting-btn{padding:6px 14px;background:#1e293b;border:1px solid #334155;border-radius:6px;color:#e2e8f0;font-size:12px;cursor:pointer}
+.setting-btn:hover{background:#2d3748}
+.setting-msg{margin-top:10px;font-size:12px;color:#60a5fa;min-height:16px}
+
+/* LIGHT THEME */
+body.light{background:#f1f5f9;color:#1e293b}
+body.light nav{background:#ffffff;border-bottom-color:#e2e8f0}
+body.light .nav-brand h1,body.light .dash-header h2,body.light .stat-card .value,body.light .finding-title,body.light .modal-head h3{color:#0f172a}
+body.light .nav-links a,body.light .nav-links button.nav-btn{color:#475569}
+body.light .nav-links a.active,body.light .nav-links button.nav-btn.active{background:#eff6ff;color:#2563eb}
+body.light .nav-links a:hover,body.light .nav-links button.nav-btn:hover{color:#0f172a}
+body.light .theme-btn{border-color:#cbd5e1;color:#475569}
+body.light .stat-card,body.light .finding,body.light .guard-item,body.light .modal{background:#ffffff;border-color:#e2e8f0;color:#1e293b}
+body.light .table-wrap{border-color:#e2e8f0;background:#ffffff}
+body.light th{background:#f8fafc;color:#475569}
+body.light td{border-top-color:#e2e8f0;color:#1e293b}
+body.light td[style*="color:#fff"]{color:#0f172a !important}
+body.light .toolbar button,body.light .setting-btn{background:#ffffff;border-color:#cbd5e1;color:#1e293b}
+body.light .toolbar button:hover,body.light .setting-btn:hover{background:#f8fafc}
+body.light .tabs{border-bottom-color:#e2e8f0}
+body.light .tab-btn{color:#64748b}
+body.light .tab-btn.active{color:#2563eb;border-bottom-color:#2563eb}
+body.light .setting-row{border-bottom-color:#e2e8f0}
+body.light .chat-box{background:#ffffff;border-color:#e2e8f0}
+body.light .msg-ai{background:#f8fafc;border-color:#e2e8f0;color:#1e293b}
+body.light .chat-input-row input{background:#f8fafc;border-color:#cbd5e1;color:#0f172a}
+body.light .chip{background:#eff6ff;border-color:#bfdbfe;color:#1d4ed8}
 
 @media(max-width:768px){.stat-row{grid-template-columns:1fr 1fr}}
 </style>
@@ -95,9 +149,9 @@ tr:hover{background:rgba(59,130,246,.04)}
   <div class="nav-links">
     <a href="/">Upload</a>
     <a href="/dashboard" class="active">Dashboard</a>
-    <a href="#">Settings</a>
+    <button type="button" class="nav-btn" onclick="openSettings()">Settings</button>
   </div>
-  <div><button class="theme-btn">☀</button></div>
+  <div><button type="button" class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="Toggle theme">☀</button></div>
 </nav>
 
 <div class="container" id="app">
@@ -107,11 +161,115 @@ tr:hover{background:rgba(59,130,246,.04)}
   </div>
 </div>
 
+<!-- SETTINGS MODAL -->
+<div class="modal-backdrop" id="settingsModal" onclick="if(event.target===this)closeSettings()">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>Settings</h3>
+      <button type="button" class="modal-close" onclick="closeSettings()">&times;</button>
+    </div>
+    <div class="setting-row">
+      <span>Appearance Theme</span>
+      <button type="button" class="setting-btn" id="modalThemeBtn" onclick="toggleTheme()">Switch to Light</button>
+    </div>
+    <div class="setting-row">
+      <span>API Key Status</span>
+      <span id="setApiKey">Checking...</span>
+    </div>
+    <div class="setting-row">
+      <span>OpenAI Base URL</span>
+      <span id="setBaseUrl" style="font-size:12px;color:#64748b">-</span>
+    </div>
+    <div class="setting-row">
+      <span>LLM Response Cache (<span id="setCacheCount">0</span>)</span>
+      <button type="button" class="setting-btn" onclick="clearCache()">Clear Cache</button>
+    </div>
+    <div class="setting-row">
+      <span>Guardrails</span>
+      <span style="font-size:12px;color:#64748b">Temp 0 · Overlap ≥ 30% · Missing &gt; 5%</span>
+    </div>
+    <div class="setting-msg" id="settingMsg"></div>
+  </div>
+</div>
+
 <script>
+// ===== Theme =====
+function applyTheme(theme) {
+  const isLight = theme === 'light';
+  document.body.classList.toggle('light', isLight);
+  document.getElementById('themeBtn').textContent = isLight ? '🌙' : '☀';
+  const mBtn = document.getElementById('modalThemeBtn');
+  if (mBtn) mBtn.textContent = isLight ? 'Switch to Dark' : 'Switch to Light';
+}
+function toggleTheme() {
+  const next = document.body.classList.contains('light') ? 'dark' : 'light';
+  localStorage.setItem('verity_theme', next);
+  applyTheme(next);
+}
+applyTheme(localStorage.getItem('verity_theme') || 'dark');
+
+// ===== Settings Modal =====
+async function openSettings() {
+  document.getElementById('settingsModal').classList.add('open');
+  document.getElementById('settingMsg').textContent = '';
+  try {
+    const res = await fetch('/api/settings');
+    const s = await res.json();
+    document.getElementById('setApiKey').textContent = s.api_key_configured ? '✅ Configured' : '⚠ Not set (fallback)';
+    document.getElementById('setBaseUrl').textContent = s.base_url;
+    document.getElementById('setCacheCount').textContent = s.cached_entries;
+  } catch (e) {
+    document.getElementById('settingMsg').textContent = 'Could not load settings.';
+  }
+}
+function closeSettings() {
+  document.getElementById('settingsModal').classList.remove('open');
+}
+async function clearCache() {
+  try {
+    const res = await fetch('/api/clear-cache', { method: 'POST' });
+    const data = await res.json();
+    document.getElementById('setCacheCount').textContent = '0';
+    document.getElementById('settingMsg').textContent = data.message || 'Cache cleared.';
+  } catch (e) {
+    document.getElementById('settingMsg').textContent = 'Failed to clear cache.';
+  }
+}
+
+// ===== Client-side Downloads (always works even after server restart) =====
+let _currentResults = null;
+function triggerDownload(filename, content, mimeType) {
+  const blob = new Blob([content], { type: mimeType });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+function exportCsv() {
+  if (!_currentResults || !_currentResults.dictionary.length) return;
+  const cols = ['Field', 'Observed type', 'Missing %', 'Distinct', 'Example values', 'Documented meaning', 'Source line', 'Status'];
+  const esc = v => '"' + String(v ?? '').replace(/"/g, '""') + '"';
+  const lines = [cols.map(esc).join(',')];
+  _currentResults.dictionary.forEach(row => {
+    lines.push(cols.map(c => esc(row[c])).join(','));
+  });
+  triggerDownload('data_dictionary.csv', lines.join('\r\n'), 'text/csv;charset=utf-8;');
+}
+function exportReport() {
+  if (!_currentResults) return;
+  const md = _currentResults.limitations_md || '# Limitations Report\n\nNo limitations detected.';
+  triggerDownload('limitations_report.md', md, 'text/markdown;charset=utf-8;');
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const raw = sessionStorage.getItem('results');
   if (!raw) return;
   const R = JSON.parse(raw);
+  _currentResults = R;
   document.getElementById('emptyState').style.display = 'none';
 
   const app = document.getElementById('app');
@@ -124,9 +282,9 @@ document.addEventListener('DOMContentLoaded', () => {
       <div class="file-info">${R.summary.total_rows.toLocaleString()} rows · ${R.summary.total_fields} columns · API calls: ${R.summary.api_calls}</div>
     </div>
     <div class="toolbar">
-      <button onclick="location.href='/api/download/dict'">↓ Export CSV</button>
-      <button onclick="location.href='/api/download/report'">↓ Export Report</button>
-      <button onclick="sessionStorage.clear();location.href='/'">🗑 Clear data</button>
+      <button type="button" onclick="exportCsv()">↓ Export CSV</button>
+      <button type="button" onclick="exportReport()">↓ Export Report</button>
+      <button type="button" onclick="sessionStorage.clear();location.href='/'">🗑 Clear data</button>
     </div>
   </div>
 
@@ -143,11 +301,13 @@ document.addEventListener('DOMContentLoaded', () => {
     <button class="tab-btn active" data-tab="dict">📋 Dictionary</button>
     <button class="tab-btn" data-tab="lim">⚠ Limitations</button>
     <button class="tab-btn" data-tab="guard">🛡 Guardrail Check</button>
+    <button class="tab-btn" data-tab="ai">🤖 AI Assistant</button>
   </div>
 
   <div class="tab-content active" id="tab-dict"></div>
   <div class="tab-content" id="tab-lim"></div>
   <div class="tab-content" id="tab-guard"></div>
+  <div class="tab-content" id="tab-ai"></div>
   `;
 
   // ---- Dictionary Table ----
@@ -199,6 +359,28 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   document.getElementById('tab-guard').innerHTML = guardHtml || '<p style="color:#22c55e;padding:20px">All guardrails passed.</p>';
 
+  // ---- AI Assistant ----
+  document.getElementById('tab-ai').innerHTML = `
+    <div class="chat-box">
+      <div style="font-size:13px;color:#94a3b8">
+        Ask questions about this dataset's columns, statistics, or exact limitation locations. Answers are strictly grounded in observed data and supplied docs.
+      </div>
+      <div class="chat-chips">
+        <button type="button" class="chip" onclick="sendQuickQuery('Summarize this dataset and its key limitations')">Summarize dataset &amp; limitations</button>
+        <button type="button" class="chip" onclick="sendQuickQuery('Where do placeholder values and outliers occur in the dataset?')">Where do placeholders &amp; outliers occur?</button>
+        <button type="button" class="chip" onclick="sendQuickQuery('Show min, max, and mean for all numeric columns')">Numeric column stats</button>
+        <button type="button" class="chip" onclick="sendQuickQuery('Which columns are undocumented?')">Undocumented columns</button>
+      </div>
+      <div class="chat-messages" id="chatMessages">
+        <div class="msg msg-ai">Hello! I have loaded the profile, data dictionary, and ${R.summary.issues} limitation findings for your ${R.summary.total_rows.toLocaleString()}-row dataset. What would you like to know?</div>
+      </div>
+      <div class="chat-input-row">
+        <input type="text" id="chatInput" placeholder="Ask about any column, statistic, or limitation location..." onkeydown="if(event.key==='Enter')askAssistant()">
+        <button type="button" class="chat-send" id="chatSendBtn" onclick="askAssistant()">Send</button>
+      </div>
+    </div>
+  `;
+
   // ---- Tab switching ----
   document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -209,6 +391,66 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 });
+
+function sendQuickQuery(text) {
+  const input = document.getElementById('chatInput');
+  if (!input) return;
+  input.value = text;
+  askAssistant();
+}
+
+function escapeHtml(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+async function askAssistant() {
+  const input = document.getElementById('chatInput');
+  const sendBtn = document.getElementById('chatSendBtn');
+  const box = document.getElementById('chatMessages');
+  const question = (input.value || '').trim();
+  if (!question || !_currentResults) return;
+
+  input.value = '';
+  sendBtn.disabled = true;
+
+  const userDiv = document.createElement('div');
+  userDiv.className = 'msg msg-user';
+  userDiv.textContent = question;
+  box.appendChild(userDiv);
+
+  const loadDiv = document.createElement('div');
+  loadDiv.className = 'msg msg-ai';
+  loadDiv.textContent = 'Analyzing dataset context...';
+  box.appendChild(loadDiv);
+  box.scrollTop = box.scrollHeight;
+
+  try {
+    const res = await fetch('/api/ask', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        question,
+        context: {
+          summary: _currentResults.summary,
+          dictionary: _currentResults.dictionary,
+          findings: _currentResults.findings,
+        },
+      }),
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      loadDiv.textContent = data.error || 'Error answering query.';
+    } else {
+      loadDiv.innerHTML = escapeHtml(data.answer).replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        + `<div class="msg-meta">Source: ${data.source || 'assistant'}</div>`;
+    }
+  } catch (e) {
+    loadDiv.textContent = 'Network error: ' + e.message;
+  } finally {
+    sendBtn.disabled = false;
+    box.scrollTop = box.scrollHeight;
+  }
+}
 </script>
 </body>
 </html>
