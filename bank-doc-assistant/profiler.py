@@ -12,7 +12,12 @@ class Stats:
 
         # Up to 5 non-null distinct sample values
         uniq = series.dropna().unique()
-        self.sample_values = [str(v) for v in uniq[:5]]
+        if len(uniq) <= 5:
+            self.sample_values = [str(v) for v in uniq]
+        else:
+            # Stratified-ish: head, middle, tail
+            idx = [0, len(uniq)//4, len(uniq)//2, 3*len(uniq)//4, len(uniq)-1]
+            self.sample_values = [str(uniq[i]) for i in idx]
 
         # Numeric stats
         if pd.api.types.is_numeric_dtype(series):

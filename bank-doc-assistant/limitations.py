@@ -172,4 +172,94 @@ def find_limitations(
                 "rule_id": "R009",
             })
 
+    # R010 – PII / sensitive columns (heuristic on column names)
+    pii_keywords = {"name", "email", "phone", "ssn", "passport", "address", "dob", "birth", "account", "card"}
+    for col in df.columns:
+        low = col.lower()
+        if any(k in low for k in pii_keywords):
+            findings.append({
+                "title": f"Potential sensitive/PII column '{col}'",
+                "evidence": f"Column '{col}' (col #{df.columns.get_loc(col) + 1}): name suggests personal/sensitive data",
+                "severity": "high",
+                "rule_id": "R010",
+            })
+
+    # R011 – high-cardinality categorical (object with > 50 distinct)
+    for col in df.select_dtypes(include="object").columns:
+        if df[col].nunique(dropna=True) > 50:
+            findings.append({
+                "title": f"High-cardinality categorical '{col}'",
+                "evidence": f"Column '{col}' (col #{df.columns.get_loc(col) + 1}): {df[col].nunique(dropna=True)} distinct values",
+                "severity": "medium",
+                "rule_id": "R011",
+            })
+
+    # R012 – mixed datatype columns (object column with numeric-looking values)
+    for col in df.columns:
+        series = df[col]
+        if series.dtype == object:
+            non_null = series.dropna().astype(str)
+            numeric_like = non_null.apply(lambda v: _is_number(v)).sum() if len(non_null) else 0
+            if 0 < numeric_like < len(non_null):
+                findings.append({
+                    "title": f"Mixed datatype column '{col}'",
+                    "evidence": f"Column '{col}' (col #{df.columns.get_loc(col) + 1}): {numeric_like} of {len(non_null)} values look numeric",
+                    "severity": "medium",
+                    "rule_id": "R012",
+                })
+
+    # R013 – unnamed columns
+    for col in df.columns:
+        if str(col).startswith("Unnamed") or str(col).strip() == "":
+            findings.append({
+                "title": f"Unnamed column '{col}'",
+                "evidence": f"Column '{col}' (col #{df.columns.get_loc(col) + 1}): no header name",
+                "severity": "medium",
+                "rule_id": "R013",
+            })
+
+    # R014 – encoded values without legend (numeric with few distinct small ints)
+    for col in df.select_dtypes(include="number").columns:
+        s = df[col].dropna()
+        if s.nunique() <= 10 and (s % 1 == 0).all() and s.max() <= 20:
+            findings.append({
+                "title": f"Possibly encoded column '{col}' (no legend)",
+                "evidence": f"Column '{col}' (col #{df.columns.get_loc(col) + 1}): {sorted(s.unique().tolist())}",
+                "severity": "low",
+                "rule_id": "R014",
+            })
+
+    # R015 – potential leakage (duration-like column vs target)
+    if target_column and target_column in df.columns:
+        for col in df.columns:
+            if col == target_column:
+                continue
+            low = col.lower()
+            if "duration" in low or "outcome" in low:
+                findings.append({
+                    "title": f"Potential target leakage via '{col}'",
+                    "evidence": f"Column '{col}' may encode post-outcome info relative to target '{target_column}'",
+                    "severity": "high",
+                    "rule_id": "R015",
+                })
+
+    # R016 – corrupted rows (rows with all-null or extreme null count)
+    null_counts = df.isna().sum(axis=1)
+    corrupted = df.index[null_counts >= len(df.columns) // 2]
+    if len(corrupted) > 0:
+        findings.append({
+            "title": "Potentially corrupted rows",
+            "evidence": f"{len(corrupted)} rows have >= half columns missing at rows {_format_rows(corrupted)}",
+            "severity": "medium",
+            "rule_id": "R016",
+        })
+
     return findings
+
+
+def _is_number(v):
+    try:
+        float(v)
+        return True
+    except (ValueError, TypeError):
+        return False
