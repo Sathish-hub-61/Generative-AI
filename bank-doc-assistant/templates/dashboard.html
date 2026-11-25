@@ -6,6 +6,7 @@
   <title>Verity – Dashboard</title>
   <link rel="stylesheet" href="/static/css/style.css">
   <link rel="stylesheet" href="/static/css/dashboard.css">
+  <link rel="stylesheet" href="/static/css/auth.css">
 </head>
 <body>
 
@@ -24,6 +25,10 @@
     <button type="button" class="nav-btn" onclick="openSettings()">Settings</button>
   </div>
   <div class="nav-right">
+    {% if current_user %}
+      <span class="nav-user" title="{{ current_user.email }}">{{ current_user.full_name }}</span>
+      <a href="/logout" class="logout-btn" onclick="sessionStorage.removeItem('results')">Logout</a>
+    {% endif %}
     <button type="button" class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="Toggle theme">☀</button>
   </div>
 </nav>
@@ -69,7 +74,12 @@
 
 <script src="/static/js/vendor/chart.umd.min.js"></script>
 <script src="/static/js/vendor/plotly-2.35.2.min.js"></script>
+<script src="/static/js/vendor/pdf.min.js"></script>
+<script src="/static/js/vendor/jszip.min.js"></script>
+<script src="/static/js/vendor/docx-preview.min.js"></script>
+<script src="/static/js/vendor/xlsx.full.min.js"></script>
 <script src="/static/js/main.js"></script>
+<script src="/static/js/doc_preview.js"></script>
 <script src="/static/js/visualizations.js"></script>
 <script src="/static/js/dashboard.js"></script>
 </body>

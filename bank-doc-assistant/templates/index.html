@@ -6,6 +6,7 @@
   <title>Verity – Bank Marketing Data Documentation Assistant</title>
   <link rel="stylesheet" href="/static/css/style.css">
   <link rel="stylesheet" href="/static/css/upload.css">
+  <link rel="stylesheet" href="/static/css/auth.css">
 </head>
 <body>
 
@@ -24,6 +25,10 @@
     <button type="button" class="nav-btn" onclick="openSettings()">Settings</button>
   </div>
   <div class="nav-right">
+    {% if current_user %}
+      <span class="nav-user" title="{{ current_user.email }}">{{ current_user.full_name }}</span>
+      <a href="/logout" class="logout-btn" onclick="sessionStorage.removeItem('results')">Logout</a>
+    {% endif %}
     <button type="button" class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="Toggle theme">☀</button>
   </div>
 </nav>
@@ -52,9 +57,9 @@
             <div class="label">Drag and drop your CSV file here</div>
             <div class="or">or</div>
             <button type="button" class="browse-btn">📁 Browse Files</button>
-            <div class="meta">Supported format: .csv &nbsp;|&nbsp; Max size: 100 MB</div>
+            <div class="meta">Supported format: .csv, .xlsx, .xls &nbsp;|&nbsp; Max size: 100 MB</div>
           </div>
-          <input type="file" id="csvInput" name="csv_file" accept=".csv" hidden>
+          <input type="file" id="csvInput" name="csv_file" accept=".csv,.xlsx,.xls" hidden>
           <div class="file-info" id="csvInfo">
             <span id="csvName"></span>
             <span class="remove" onclick="clearFile('csv')">&times;</span>
@@ -63,6 +68,28 @@
           <div class="target-section">
             <label for="targetCol">Target column for class-imbalance check (optional):</label>
             <input type="text" id="targetCol" name="target_column" placeholder="e.g. conversion_status">
+          </div>
+        </div>
+
+        <!-- Documentation Upload Card -->
+        <div class="card">
+          <h3>
+            <span style="color:var(--primary-500);font-size:20px">📑</span>
+            Field Documentation
+            <span class="opt">Optional</span>
+          </h3>
+          <p class="sub">Upload the original field documentation file to match field meanings and preview it in AI Assistant.</p>
+          <div class="dropzone" id="docDrop" onclick="document.getElementById('docInput').click()">
+            <div class="cloud">📄</div>
+            <div class="label">Drag and drop your documentation file here</div>
+            <div class="or">or</div>
+            <button type="button" class="browse-btn">📁 Browse Documentation</button>
+            <div class="meta">Supported formats: .pdf, .docx, .csv, .xlsx, .xls, .txt, .md</div>
+          </div>
+          <input type="file" id="docInput" name="doc_file" accept=".pdf,.docx,.csv,.xlsx,.xls,.txt,.md,.markdown" hidden>
+          <div class="file-info" id="docInfo">
+            <span id="docName"></span>
+            <span class="remove" onclick="clearFile('doc')">&times;</span>
           </div>
         </div>
       </div>

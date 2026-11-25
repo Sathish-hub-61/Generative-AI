@@ -7,3 +7,20 @@
 {"ts": 1795599852.0178576, "event": "process", "payload": {"summary": {"total_fields": 11, "total_rows": 45211, "documented": 1, "undocumented": 10, "issues": 10, "api_calls": 0, "metadata_coverage": 9.09, "documentation_completeness": 9.09, "governance_score": 9.09, "transparency_score": 90.91, "risk_score": 18}}}
 {"ts": 1795599882.683581, "event": "process", "payload": {"summary": {"total_fields": 17, "total_rows": 11162, "documented": 0, "undocumented": 17, "issues": 16, "api_calls": 0, "metadata_coverage": 0.0, "documentation_completeness": 0.0, "governance_score": 0.0, "transparency_score": 100.0, "risk_score": 26}}}
 {"ts": 1795600085.5143414, "event": "process", "payload": {"summary": {"total_fields": 17, "total_rows": 11162, "documented": 0, "undocumented": 17, "issues": 16, "api_calls": 0, "metadata_coverage": 0.0, "documentation_completeness": 0.0, "governance_score": 0.0, "transparency_score": 100.0, "risk_score": 26}}}
+{"ts": 1795602102.2042499, "event": "register", "payload": {"user_id": 1, "email": "kurrapothulagowtham@gmail.com"}}
+{"ts": 1795602106.858738, "event": "login", "payload": {"user_id": 1, "email": "kurrapothulagowtham@gmail.com"}}
+{"ts": 1795602115.8765934, "event": "process", "payload": {"summary": {"total_fields": 17, "total_rows": 11162, "documented": 0, "undocumented": 17, "issues": 16, "api_calls": 0, "metadata_coverage": 0.0, "documentation_completeness": 0.0, "governance_score": 0.0, "transparency_score": 100.0, "risk_score": 26}}}
+{"ts": 1795602142.5328178, "event": "register", "payload": {"user_id": 2, "email": "qa_verify_user@example.com"}}
+{"ts": 1795602143.0037742, "event": "login", "payload": {"user_id": 2, "email": "qa_verify_user@example.com"}}
+{"ts": 1795602143.5124815, "event": "process", "payload": {"summary": {"total_fields": 17, "total_rows": 11162, "documented": 0, "undocumented": 17, "issues": 16, "api_calls": 0, "metadata_coverage": 0.0, "documentation_completeness": 0.0, "governance_score": 0.0, "transparency_score": 100.0, "risk_score": 26}}}
+{"ts": 1795602143.547481, "event": "forgot_password_request", "payload": {"email": "qa_verify_user@example.com"}}
+{"ts": 1795602143.5533724, "event": "logout", "payload": {"user_id": 2}}
+{"ts": 1795602153.6935334, "event": "logout", "payload": {"user_id": 1}}
+{"ts": 1795602322.5913184, "event": "login", "payload": {"user_id": 1, "email": "kurrapothulagowtham@gmail.com"}}
+{"ts": 1795602333.808176, "event": "process", "payload": {"summary": {"total_fields": 17, "total_rows": 11162, "documented": 0, "undocumented": 17, "issues": 16, "api_calls": 0, "metadata_coverage": 0.0, "documentation_completeness": 0.0, "governance_score": 0.0, "transparency_score": 100.0, "risk_score": 26}}}
+{"ts": 1795602832.701199, "event": "logout", "payload": {"user_id": 1}}
+{"ts": 1795602838.9380388, "event": "login", "payload": {"user_id": 1, "email": "kurrapothulagowtham@gmail.com"}}
+{"ts": 1795602851.5744514, "event": "process", "payload": {"summary": {"total_fields": 17, "total_rows": 11162, "documented": 0, "undocumented": 17, "issues": 16, "api_calls": 0, "metadata_coverage": 0.0, "documentation_completeness": 0.0, "governance_score": 0.0, "transparency_score": 100.0, "risk_score": 26}}}
+{"ts": 1795603180.274944, "event": "logout", "payload": {"user_id": 1}}
+{"ts": 1795603187.4144728, "event": "login", "payload": {"user_id": 1, "email": "kurrapothulagowtham@gmail.com"}}
+{"ts": 1795603203.6320703, "event": "process", "payload": {"summary": {"total_fields": 17, "total_rows": 11162, "documented": 0, "undocumented": 17, "issues": 16, "api_calls": 0, "metadata_coverage": 0.0, "documentation_completeness": 0.0, "governance_score": 0.0, "transparency_score": 100.0, "risk_score": 26}}}

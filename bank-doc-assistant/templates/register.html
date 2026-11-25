@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verity – Create Account</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="stylesheet" href="/static/css/auth.css">
+</head>
+<body class="auth-page">
+
+<div class="auth-topbar">
+  <button type="button" class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="Toggle theme">☀</button>
+</div>
+
+<main class="auth-main">
+  <div class="auth-card" style="max-width:460px">
+    <div class="auth-brand">
+      <div class="auth-logo">V</div>
+      <h1>Bank Marketing Data Documentation Assistant</h1>
+      <p>Create your account to access the documentation workspace.</p>
+    </div>
+
+    <div id="authAlert" class="auth-alert" role="alert"></div>
+
+    <form id="registerForm" class="auth-form" method="post" action="/register" novalidate>
+      <div class="auth-field">
+        <label for="regName">Full name</label>
+        <div class="auth-input-wrap">
+          <input type="text" id="regName" name="full_name" placeholder="Jane Doe" autocomplete="name" required>
+        </div>
+      </div>
+
+      <div class="auth-field">
+        <label for="regEmail">Email address</label>
+        <div class="auth-input-wrap">
+          <input type="email" id="regEmail" name="email" placeholder="you@example.com" autocomplete="email" required>
+        </div>
+      </div>
+
+      <div class="auth-field">
+        <label for="regPassword">Password</label>
+        <div class="auth-input-wrap has-toggle">
+          <input type="password" id="regPassword" name="password" placeholder="Create a password" autocomplete="new-password" required>
+          <button type="button" class="pw-toggle" onclick="togglePassword('regPassword', this)" aria-label="Show or hide password" aria-pressed="false">Show</button>
+        </div>
+        <div class="auth-hint">Minimum 6 characters</div>
+      </div>
+
+      <div class="auth-field">
+        <label for="regConfirmPassword">Confirm password</label>
+        <div class="auth-input-wrap has-toggle">
+          <input type="password" id="regConfirmPassword" name="confirm_password" placeholder="Re-enter your password" autocomplete="new-password" required>
+          <button type="button" class="pw-toggle" onclick="togglePassword('regConfirmPassword', this)" aria-label="Show or hide confirm password" aria-pressed="false">Show</button>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-primary auth-submit" id="registerBtn">
+        <span class="btn-label">Create Account</span>
+        <div class="spinner" id="registerSpinner"></div>
+      </button>
+    </form>
+
+    <div class="auth-footer">
+      Already have an account? <a href="/login" class="auth-link">Login</a>
+    </div>
+  </div>
+</main>
+
+<script src="/static/js/main.js"></script>
+<script src="/static/js/auth.js"></script>
+</body>
+</html>

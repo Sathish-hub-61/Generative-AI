@@ -57,6 +57,7 @@ function clearFile(type) {
 
 function clearAll() {
   clearFile('csv');
+  clearFile('doc');
   const targetCol = document.getElementById('targetCol');
   if (targetCol) targetCol.value = '';
   hideStatus();
@@ -79,6 +80,7 @@ function hideStatus() {
 // Initialize Dropzone
 document.addEventListener('DOMContentLoaded', () => {
   setupDrop('csvDrop', 'csvInput', 'csvInfo', 'csvName');
+  setupDrop('docDrop', 'docInput', 'docInfo', 'docName');
 
   const form = document.getElementById('mainForm');
   if (!form) return;

@@ -220,27 +220,68 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   document.getElementById('tab-guard').innerHTML = guardHtml;
 
-  // ---- Tab 4: AI Assistant ----
+  // ---- Tab 4: AI Assistant (60% Chatbot / 40% Original Document Preview) ----
   document.getElementById('tab-ai').innerHTML = `
-    <div class="chat-box">
-      <div style="font-size:13px;color:var(--text-muted);line-height:1.5">
-        Ask questions about this dataset's columns, statistics, or exact limitation locations. All responses are strictly grounded in observed data measurements and supplied documentation.
+    <div class="ai-split-layout">
+      <div class="ai-chat-panel">
+        <div class="chat-box ai-chat-box">
+          <div style="font-size:13px;color:var(--text-muted);line-height:1.5">
+            Ask questions about this dataset's columns, statistics, or exact limitation locations. All responses are strictly grounded in observed data measurements and supplied documentation.
+          </div>
+          <div class="chat-chips">
+            <button type="button" class="chip" onclick="sendQuickQuery('Summarize this dataset and its key limitations')">Summarize dataset &amp; limitations</button>
+            <button type="button" class="chip" onclick="sendQuickQuery('Where do placeholder values and outliers occur in the dataset?')">Where do placeholders &amp; outliers occur?</button>
+            <button type="button" class="chip" onclick="sendQuickQuery('Show min, max, and mean for all numeric columns')">Numeric column stats</button>
+            <button type="button" class="chip" onclick="sendQuickQuery('Which columns are undocumented?')">Undocumented columns</button>
+          </div>
+          <div class="chat-messages" id="chatMessages">
+            <div class="msg msg-ai">Hello! I have loaded the statistical profile, data dictionary, and ${R.summary.issues} limitation findings for your ${R.summary.total_rows.toLocaleString()}-row dataset. How can I assist you with this dataset?</div>
+          </div>
+          <div class="chat-input-row">
+            <input type="text" id="chatInput" placeholder="Ask about any column, statistic, or limitation location..." onkeydown="if(event.key==='Enter')askAssistant()">
+            <button type="button" class="chat-send" id="chatSendBtn" onclick="askAssistant()">Send</button>
+          </div>
+        </div>
       </div>
-      <div class="chat-chips">
-        <button type="button" class="chip" onclick="sendQuickQuery('Summarize this dataset and its key limitations')">Summarize dataset &amp; limitations</button>
-        <button type="button" class="chip" onclick="sendQuickQuery('Where do placeholder values and outliers occur in the dataset?')">Where do placeholders &amp; outliers occur?</button>
-        <button type="button" class="chip" onclick="sendQuickQuery('Show min, max, and mean for all numeric columns')">Numeric column stats</button>
-        <button type="button" class="chip" onclick="sendQuickQuery('Which columns are undocumented?')">Undocumented columns</button>
-      </div>
-      <div class="chat-messages" id="chatMessages">
-        <div class="msg msg-ai">Hello! I have loaded the statistical profile, data dictionary, and ${R.summary.issues} limitation findings for your ${R.summary.total_rows.toLocaleString()}-row dataset. How can I assist you with this dataset?</div>
-      </div>
-      <div class="chat-input-row">
-        <input type="text" id="chatInput" placeholder="Ask about any column, statistic, or limitation location..." onkeydown="if(event.key==='Enter')askAssistant()">
-        <button type="button" class="chat-send" id="chatSendBtn" onclick="askAssistant()">Send</button>
+
+      <div class="ai-split-divider" aria-hidden="true"></div>
+
+      <div class="ai-doc-panel">
+        <div class="doc-preview-header">
+          <div class="doc-title-group">
+            <span class="doc-panel-label">Original Document</span>
+            <div class="doc-file-meta">
+              <span id="docPreviewFilename" class="doc-filename" title="">No document uploaded</span>
+              <span id="docPreviewBadge" class="badge badge-blue" style="display:none"></span>
+            </div>
+          </div>
+          <div class="doc-toolbar-actions">
+            <div id="docPdfControls" class="doc-pdf-controls" style="display:none">
+              <span id="docPageCount" class="doc-page-count"></span>
+              <button type="button" class="doc-ctrl-btn" onclick="zoomDocPreview(-0.15)" title="Zoom out">−</button>
+              <span id="docZoomPct" class="doc-zoom-pct">100%</span>
+              <button type="button" class="doc-ctrl-btn" onclick="zoomDocPreview(0.15)" title="Zoom in">+</button>
+              <button type="button" class="doc-ctrl-btn" onclick="resetDocZoom()" title="Reset zoom">Fit</button>
+            </div>
+            <div id="docCsvModeControls" class="doc-pdf-controls" style="display:none">
+              <button type="button" class="doc-ctrl-btn active" id="csvModeTableBtn" onclick="setCsvViewMode('table')">Table</button>
+              <button type="button" class="doc-ctrl-btn" id="csvModeRawBtn" onclick="setCsvViewMode('raw')">Raw</button>
+            </div>
+            <input type="file" id="docPreviewUploadInput" accept=".csv,.xlsx,.xls,.pdf,.docx,.txt,.md,.markdown" hidden onchange="handlePreviewFileUpload(this)">
+            <button type="button" class="doc-upload-btn" onclick="document.getElementById('docPreviewUploadInput').click()" title="Upload CSV, XLSX, PDF, DOCX, TXT, or MD to preview">↑ Upload</button>
+            <a id="docDownloadBtn" href="/api/document/download" class="doc-download-btn" style="display:none" download>↓ Download</a>
+          </div>
+        </div>
+        <div id="docPreviewBody" class="doc-preview-body">
+          <div class="doc-empty-state">Upload a document to preview it here.</div>
+        </div>
       </div>
     </div>
   `;
+
+  if (typeof initDocPreview === 'function') {
+    initDocPreview(R);
+  }
 
   // ---- Initialize Visualizations ----
   if (typeof initVisualizations === 'function') {
@@ -258,6 +299,9 @@ document.addEventListener('DOMContentLoaded', () => {
     target.classList.add('active');
     if (tabName === 'viz' && typeof activateVisualizationsTab === 'function') {
       activateVisualizationsTab();
+    }
+    if (tabName === 'ai' && typeof activateDocPreviewTab === 'function') {
+      activateDocPreviewTab();
     }
   }
 

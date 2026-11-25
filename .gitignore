@@ -11,3 +11,4 @@ venv/
 **/.last_dataset.csv
 .last_context.json
 **/.last_context.json
+bank-doc-assistant/users.db
