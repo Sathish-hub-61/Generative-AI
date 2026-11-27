@@ -24,3 +24,6 @@
 {"ts": 1795603180.274944, "event": "logout", "payload": {"user_id": 1}}
 {"ts": 1795603187.4144728, "event": "login", "payload": {"user_id": 1, "email": "kurrapothulagowtham@gmail.com"}}
 {"ts": 1795603203.6320703, "event": "process", "payload": {"summary": {"total_fields": 17, "total_rows": 11162, "documented": 0, "undocumented": 17, "issues": 16, "api_calls": 0, "metadata_coverage": 0.0, "documentation_completeness": 0.0, "governance_score": 0.0, "transparency_score": 100.0, "risk_score": 26}}}
+{"ts": 1795753374.466904, "event": "register", "payload": {"user_id": 1, "email": "vnayunigaribtech23@ced.alliance.edu.in"}}
+{"ts": 1795753379.5877788, "event": "login", "payload": {"user_id": 1, "email": "vnayunigaribtech23@ced.alliance.edu.in"}}
+{"ts": 1795753398.508126, "event": "process", "payload": {"summary": {"total_fields": 17, "total_rows": 11162, "documented": 0, "undocumented": 17, "issues": 16, "api_calls": 0, "metadata_coverage": 0.0, "documentation_completeness": 0.0, "governance_score": 0.0, "transparency_score": 100.0, "risk_score": 26}}}
